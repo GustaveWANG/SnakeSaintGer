@@ -16,6 +16,10 @@ let score;
 let gameTimer;
 let gameRunning;
 let gameOver;
+let touchStartX;
+let touchStartY;
+
+const swipeThreshold = 24;
 
 function resetGame() {
   snake = [
@@ -28,8 +32,10 @@ function resetGame() {
   score = 0;
   gameRunning = false;
   gameOver = false;
+  touchStartX = undefined;
+  touchStartY = undefined;
   scoreElement.textContent = score;
-  messageElement.textContent = 'Press an arrow key to start';
+  messageElement.textContent = 'Press an arrow key or swipe to start';
   messageElement.classList.remove('hidden');
   placeFood();
   stopTimer();
@@ -210,6 +216,11 @@ function drawFood() {
   ctx.fill();
 }
 
+function moveSnake(newDirection) {
+  setDirection(newDirection);
+  startGame();
+}
+
 function setDirection(newDirection) {
   const reversing =
     newDirection.x + direction.x === 0 &&
@@ -233,9 +244,47 @@ document.addEventListener('keydown', event => {
   }
 
   event.preventDefault();
-  setDirection(directions[event.key]);
-  startGame();
+  moveSnake(directions[event.key]);
 });
+
+canvas.addEventListener('touchstart', event => {
+  if (!event.changedTouches.length) {
+    return;
+  }
+
+  event.preventDefault();
+  const touch = event.changedTouches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+}, { passive: false });
+
+canvas.addEventListener('touchmove', event => {
+  event.preventDefault();
+}, { passive: false });
+
+canvas.addEventListener('touchend', event => {
+  if (touchStartX === undefined || touchStartY === undefined || !event.changedTouches.length) {
+    return;
+  }
+
+  event.preventDefault();
+  const touch = event.changedTouches[0];
+  const deltaX = touch.clientX - touchStartX;
+  const deltaY = touch.clientY - touchStartY;
+
+  touchStartX = undefined;
+  touchStartY = undefined;
+
+  if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < swipeThreshold) {
+    return;
+  }
+
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    moveSnake({ x: deltaX > 0 ? 1 : -1, y: 0 });
+  } else {
+    moveSnake({ x: 0, y: deltaY > 0 ? 1 : -1 });
+  }
+}, { passive: false });
 
 restartButton.addEventListener('click', resetGame);
 
