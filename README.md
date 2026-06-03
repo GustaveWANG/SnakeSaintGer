@@ -8,7 +8,7 @@ No installation or external dependencies are required.
 
 1. Clone or download this repository.
 2. Open `index.html` directly in a modern web browser.
-3. Use the arrow keys to start and steer the snake.
+3. Use the arrow keys on desktop or swipe on mobile and tablet to start and steer the snake.
 4. Eat the red food to increase your score.
 5. Avoid the walls and the snake's body.
 6. Click **Restart** to play again after a game over or to reset the board.
