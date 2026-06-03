@@ -119,10 +119,38 @@ button:focus-visible {
   transform: translateY(-1px);
 }
 
+.direction-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(4.5rem, 1fr));
+  gap: 0.6rem;
+  max-width: 320px;
+  margin: 1rem auto 0;
+}
+
+.direction-button {
+  min-height: 3rem;
+  padding: 0.75rem;
+  touch-action: manipulation;
+}
+
+.direction-up,
+.direction-down {
+  grid-column: 2;
+}
+
+.direction-left {
+  grid-column: 1;
+}
+
+.direction-right {
+  grid-column: 3;
+}
+
 .canvas-wrap {
   position: relative;
   width: min(100%, 480px);
   margin: 0 auto;
+  touch-action: none;
 }
 
 canvas {
@@ -162,7 +190,7 @@ canvas {
     flex-direction: column;
   }
 
-  button,
+  #restartButton,
   .score-card {
     justify-content: center;
     width: 100%;

@@ -12,8 +12,8 @@
       <p class="eyebrow">Abstract Saint-Germain-en-Laye map edition</p>
       <h1 id="game-title">Saint-Germain Snake</h1>
       <p class="instructions">
-        Use arrow keys or swipe to move. Eat red food to score, avoid walls and
-        yourself, then press Restart to play again.
+        Use arrow keys, swipe, or buttons to move. Eat red food to score, avoid
+        walls and yourself, then press Restart to play again.
       </p>
     </section>
 
@@ -29,8 +29,15 @@
       <div class="canvas-wrap">
         <canvas id="gameCanvas" width="480" height="480" aria-label="Playable snake board with an abstract Saint-Germain-en-Laye map background"></canvas>
         <div id="gameMessage" class="game-message" role="status" aria-live="polite">
-          Press an arrow key to start
+          Use arrow keys, swipe, or buttons to move.
         </div>
+      </div>
+
+      <div class="direction-controls" aria-label="Direction controls">
+        <button class="direction-button direction-up" type="button" data-direction="up" aria-label="Move up">Up</button>
+        <button class="direction-button direction-left" type="button" data-direction="left" aria-label="Move left">Left</button>
+        <button class="direction-button direction-right" type="button" data-direction="right" aria-label="Move right">Right</button>
+        <button class="direction-button direction-down" type="button" data-direction="down" aria-label="Move down">Down</button>
       </div>
     </section>
   </main>

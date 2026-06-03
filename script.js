@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
 const messageElement = document.getElementById('gameMessage');
 const restartButton = document.getElementById('restartButton');
+const canvasWrap = document.querySelector('.canvas-wrap');
+const directionButtons = document.querySelectorAll('[data-direction]');
 
 const tileSize = 24;
 const tileCount = canvas.width / tileSize;
@@ -32,10 +34,9 @@ function resetGame() {
   score = 0;
   gameRunning = false;
   gameOver = false;
-  touchStartX = undefined;
-  touchStartY = undefined;
+  resetTouchStart();
   scoreElement.textContent = score;
-  messageElement.textContent = 'Press an arrow key or swipe to start';
+  messageElement.textContent = 'Use arrow keys, swipe, or buttons to move.';
   messageElement.classList.remove('hidden');
   placeFood();
   stopTimer();
@@ -231,14 +232,23 @@ function setDirection(newDirection) {
   }
 }
 
-document.addEventListener('keydown', event => {
-  const directions = {
-    ArrowUp: { x: 0, y: -1 },
-    ArrowDown: { x: 0, y: 1 },
-    ArrowLeft: { x: -1, y: 0 },
-    ArrowRight: { x: 1, y: 0 }
-  };
+const directions = {
+  ArrowUp: { x: 0, y: -1 },
+  ArrowDown: { x: 0, y: 1 },
+  ArrowLeft: { x: -1, y: 0 },
+  ArrowRight: { x: 1, y: 0 },
+  up: { x: 0, y: -1 },
+  down: { x: 0, y: 1 },
+  left: { x: -1, y: 0 },
+  right: { x: 1, y: 0 }
+};
 
+function resetTouchStart() {
+  touchStartX = undefined;
+  touchStartY = undefined;
+}
+
+document.addEventListener('keydown', event => {
   if (!directions[event.key]) {
     return;
   }
@@ -247,7 +257,17 @@ document.addEventListener('keydown', event => {
   moveSnake(directions[event.key]);
 });
 
-canvas.addEventListener('touchstart', event => {
+directionButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    if (gameOver) {
+      resetGame();
+    }
+
+    moveSnake(directions[button.dataset.direction]);
+  });
+});
+
+canvasWrap.addEventListener('touchstart', event => {
   if (!event.changedTouches.length) {
     return;
   }
@@ -258,11 +278,11 @@ canvas.addEventListener('touchstart', event => {
   touchStartY = touch.clientY;
 }, { passive: false });
 
-canvas.addEventListener('touchmove', event => {
+canvasWrap.addEventListener('touchmove', event => {
   event.preventDefault();
 }, { passive: false });
 
-canvas.addEventListener('touchend', event => {
+canvasWrap.addEventListener('touchend', event => {
   if (touchStartX === undefined || touchStartY === undefined || !event.changedTouches.length) {
     return;
   }
@@ -272,8 +292,7 @@ canvas.addEventListener('touchend', event => {
   const deltaX = touch.clientX - touchStartX;
   const deltaY = touch.clientY - touchStartY;
 
-  touchStartX = undefined;
-  touchStartY = undefined;
+  resetTouchStart();
 
   if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < swipeThreshold) {
     return;
@@ -285,6 +304,8 @@ canvas.addEventListener('touchend', event => {
     moveSnake({ x: 0, y: deltaY > 0 ? 1 : -1 });
   }
 }, { passive: false });
+
+canvasWrap.addEventListener('touchcancel', resetTouchStart);
 
 restartButton.addEventListener('click', resetGame);
 
