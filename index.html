@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saint-Germain Snake</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="hero" aria-labelledby="game-title">
+      <p class="eyebrow">Abstract Saint-Germain-en-Laye map edition</p>
+      <h1 id="game-title">Saint-Germain Snake</h1>
+      <p class="instructions">
+        Use the arrow keys to guide the snake through the map. Eat red food to score,
+        avoid walls and yourself, then press Restart to play again.
+      </p>
+    </section>
+
+    <section class="panel" aria-label="Snake game">
+      <div class="score-row">
+        <div class="score-card">
+          <span class="score-label">Score</span>
+          <strong id="score">0</strong>
+        </div>
+        <button id="restartButton" type="button">Restart</button>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="gameCanvas" width="480" height="480" aria-label="Playable snake board with an abstract Saint-Germain-en-Laye map background"></canvas>
+        <div id="gameMessage" class="game-message" role="status" aria-live="polite">
+          Press an arrow key to start
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
